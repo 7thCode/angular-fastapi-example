@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Copyright (c) 2019 7thCode.(http://seventh-code.com/)
+# This software is released under the MIT License.
+# opensource.org/licenses/mit-license.php
+
 # pm2登録
 # pm2 start result.py --name result --interpreter python3
 
-import json
+
 import pathlib
 
 import uvicorn
@@ -15,8 +19,6 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from server import auth
-
-config = json.load(open('config/default.json', 'r'))
 
 app = FastAPI()
 

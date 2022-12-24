@@ -1,3 +1,8 @@
+# Copyright (c) 2019 7thCode.(http://seventh-code.com/)
+# This software is released under the MIT License.
+# opensource.org/licenses/mit-license.php
+
+import json
 from datetime import datetime, timedelta
 
 from bson.objectid import ObjectId
@@ -7,11 +12,13 @@ from jose import jwt
 
 from server.models import User
 
-SECRET = 'SECRET_KEY123'
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-user = User("localhost")
+config = json.load(open('config/default.json', 'r'))
+
+SECRET = config['secret']
+
+user = User(config['host'],config['db'], config['collection'])
 
 
 def authenticate(name: str, password: str):
