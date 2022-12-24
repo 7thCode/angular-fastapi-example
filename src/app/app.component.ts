@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     public username: string = "";
     public password: string = "";
     public display_name: string = "";
-    public progress: boolean = false;
+    public progress: number = 0;
     /**
      *
      **/
@@ -34,10 +34,10 @@ export class AppComponent implements OnInit {
         const token: string | null = localStorage.getItem('access_token');
         if (token) {
             this.service.setAccessToken(token);
-            this.progress = true;
+            this.progress++;
             this.service.self((error: IErrorObject, result: any): void => {
                 if (!error) {
-                    this.progress = false;
+                    this.progress--;
                     this.display_name = result.username;
                 }
             });
@@ -50,14 +50,14 @@ export class AppComponent implements OnInit {
      * login
      **/
     public login() {
-        this.progress = true;
+        this.progress++;
         this.service.login(this.username, this.password, (error: IErrorObject, result: any): void => {
             if (!error) {
                 this.service.setAccessToken(result.access_token);
                 localStorage.setItem('access_token', result.access_token);
                 this.service.self((error: IErrorObject, result: any): void => {
                     if (!error) {
-                        this.progress = false;
+                        this.progress--;
                         this.display_name = result.username;
                     }
                 });
@@ -69,10 +69,10 @@ export class AppComponent implements OnInit {
      * logout
      **/
     public logout() {
-        this.progress = true;
+        this.progress++;
         this.service.logout((error: IErrorObject, result: any): void => {
             if (!error) {
-                this.progress = false;
+                this.progress--;
                 localStorage.removeItem('access_token');
                 this.display_name = "";
             }
@@ -83,10 +83,10 @@ export class AppComponent implements OnInit {
      * getSelf
      **/
     public getSelf() {
-        this.progress = true;
+        this.progress++;
         this.service.self((error: IErrorObject, result: any): void => {
             if (!error) {
-                this.progress = false;
+                this.progress--;
                 this.display_name = result.username;
             }
         });
@@ -96,10 +96,10 @@ export class AppComponent implements OnInit {
      * renewToken
      **/
     public renewToken() {
-        this.progress = true;
+        this.progress++;
         this.service.renewToken((error: IErrorObject, result: any): void => {
             if (!error) {
-                this.progress = false;
+                this.progress--;
                 this.service.setAccessToken(result.access_token);
                 localStorage.setItem('access_token', result.access_token);
             }

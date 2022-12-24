@@ -43,6 +43,6 @@
             <div>{{display_name}}</div>
         </mat-card-content>
     </mat-card>
-    <mat-spinner *ngIf="progress == true" class="spinner"></mat-spinner>
+    <mat-spinner *ngIf="progress !== 0" class="spinner"></mat-spinner>
 </div>
 <router-outlet></router-outlet>
