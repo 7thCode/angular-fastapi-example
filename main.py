@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2019 7thCode.(http://seventh-code.com/)
+# Copyright (c) 2022 7thCode.(http://seventh-code.com/)
 # This software is released under the MIT License.
 # opensource.org/licenses/mit-license.php
 
@@ -20,7 +20,13 @@ from pydantic import BaseModel
 
 from server import auth
 
+PATH_ROOT = str(pathlib.Path(__file__).resolve().parent)
+PUBLIC = "public"
+PATH_PUBLIC = str(pathlib.Path(__file__).resolve().parent / PUBLIC)
+
 app = FastAPI()
+
+app.mount("/" + PUBLIC, StaticFiles(directory=PATH_PUBLIC), name=PUBLIC)
 
 
 class Token(BaseModel):
@@ -35,48 +41,42 @@ class User(BaseModel):
     username: str
 
 
-
-PATH_ROOT = str(pathlib.Path(__file__).resolve().parent)
-PUBLIC = "public"
-PATH_PUBLIC = str(pathlib.Path(__file__).resolve().parent / PUBLIC)
-
-app.mount("/" + PUBLIC, StaticFiles(directory=PATH_PUBLIC), name=PUBLIC)
-
+# Login
 @app.post("/login", response_model=Token)
 async def login(form: OAuth2PasswordRequestForm = Depends()):
     user_id = None
     user = auth.authenticate(form.username, form.password)
     if user is not None:
         user_id = user["user_id"]
-    return  auth.create_token(user_id)
+    return auth.create_token(user_id)
 
-
+# Logout
 @app.delete("/logout", response_model=Token)
-async def renew_token(current_user: User = Depends( auth.user_from_access_token_with_compare)):
+async def renew_token(current_user: User = Depends(auth.user_from_access_token_with_compare)):
     user_id = None
     if current_user is not None:
         user_id = current_user["user_id"]
-    return  auth.delete_token(user_id)
+    return auth.delete_token(user_id)
 
-
+# getToken
 @app.get("/get_token", response_model=Token)
-async def renew_token(current_user: User = Depends( auth.user_from_access_token_with_compare)):
+async def renew_token(current_user: User = Depends(auth.user_from_access_token_with_compare)):
     user_id = None
     if current_user is not None:
         user_id = current_user["user_id"]
-    return  auth.get_token(user_id)
+    return auth.get_token(user_id)
 
-
+# renewToken
 @app.get("/renew_token", response_model=Token)
-async def renew_token(current_user: User = Depends( auth.user_from_access_token_with_compare)):
+async def renew_token(current_user: User = Depends(auth.user_from_access_token_with_compare)):
     user_id = None
     if current_user is not None:
         user_id = current_user["user_id"]
-    return  auth.create_token(user_id)
+    return auth.create_token(user_id)
 
-
+#
 @app.get("/self", response_model=User)
-async def self(current_user: User = Depends( auth.user_from_access_token)):
+async def self(current_user: User = Depends(auth.user_from_access_token)):
     result = {"code": -1, "user_id": "", "username": ""}
     if current_user is not None:
         result = {"code": 0, "user_id": str(current_user['user_id']), "username": str(current_user['username'])}
@@ -95,7 +95,6 @@ def index():
         html_content = "Error"
     finally:
         return HTMLResponse(html_content, status_code=status_code)
-
 
 
 if __name__ == "__main__":

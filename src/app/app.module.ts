@@ -11,6 +11,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {FlexLayoutModule} from "@angular/flex-layout";
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        MatCardModule
     ],
   providers: [
 		AppService

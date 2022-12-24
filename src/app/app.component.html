@@ -1,35 +1,45 @@
 <!--
- * Copyright (c) 2019 7thCode.(http://seventh-code.com/)
+ * Copyright (c) 2022 7thCode.(http://seventh-code.com/)
  * This software is released under the MIT License.
  * opensource.org/licenses/mit-license.php
 -->
 
 <div>
-    Hello!
-    <button mat-raised-button color="primary" (click)="login()">login</button>
-    <button mat-raised-button color="warn" (click)="getSelf()">getUser</button>
-    <button mat-raised-button color="accent" (click)="logout()">logout</button>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Login</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form #form="ngForm" fxLayout="column" fxLayoutAlign="space-between" novalidate>
 
-    <form #form="ngForm" fxLayout="column" fxLayoutAlign="space-between" novalidate>
+                <mat-form-field appearance="outline" style="margin:12px;">
+                    <mat-label>email address</mat-label>
+                    <input #username_field="ngModel" [(ngModel)]="username" matInput autocomplete="off" email maxlength="255" minlength="3" placeholder="email address" required type="email">
+                    <mat-error *ngIf="username_field.errors?.['email'];">Invalid email address</mat-error>
+                    <mat-error *ngIf="username_field.errors?.['required'];">Required</mat-error>
+                    <mat-error *ngIf="username_field.errors?.['maxlength'];">too long</mat-error>
+                    <mat-error *ngIf="username_field.errors?.['minlength'];">too short</mat-error>
+                </mat-form-field>
 
-        <mat-form-field appearance="outline" style="margin:12px;">
-            <mat-label>email address</mat-label>
-            <input #username_field="ngModel" [(ngModel)]="username" matInput autocomplete="off" email maxlength="255" minlength="3" placeholder="email address" required type="email">
-            <mat-error *ngIf="username_field.errors?.['email'];">Invalid email address</mat-error>
-            <mat-error *ngIf="username_field.errors?.['required'];">Required</mat-error>
-            <mat-error *ngIf="username_field.errors?.['maxlength'];">too long</mat-error>
-            <mat-error *ngIf="username_field.errors?.['minlength'];">too short</mat-error>
-        </mat-form-field>
+                <mat-form-field appearance="outline" style="margin:12px;">
+                    <mat-label>password</mat-label>
+                    <input #password_field="ngModel" [(ngModel)]="password" matInput maxlength="100" placeholder="password" required type="password">
+                </mat-form-field>
 
-        <mat-form-field appearance="outline" style="margin:12px;">
-            <mat-label>password</mat-label>
-            <input #password_field="ngModel" [(ngModel)]="password" matInput maxlength="100" placeholder="password" required type="password">
-        </mat-form-field>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="login()">login</button>
+            <button mat-raised-button color="warn" (click)="getSelf()">getUser</button>
+            <button mat-raised-button color="accent" (click)="logout()">logout</button>
+        </mat-card-actions>
+    </mat-card>
 
-    </form>
-
-    <div>{{logged_in}}</div>
-
-    <div>{{displayname}}</div>
+    <mat-card>
+        <mat-card-content>
+            <div>{{logged_in}}</div>
+            <div>{{displayname}}</div>
+        </mat-card-content>
+    </mat-card>
 </div>
 <router-outlet></router-outlet>
