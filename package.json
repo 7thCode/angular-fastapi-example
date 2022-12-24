@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "scripts": {
         "ng": "ng",
-        "build_angular": "ng build --source-map --output-path=./public --deploy-url=/public/",
+        "build_client": "ng build --source-map --output-path=./public --deploy-url=/public/",
         "test": "ng test"
     },
     "private": true,

@@ -158,55 +158,5 @@ export class AppService {
         );
     }
 
-    /**
-     * 単一のオブジェクトを返す
-     *
-     * @param callback オブジェクトを返すコールバック
-     */
-    public classification(callback: Callback<any>): void {
-        this.http.get("/classification", this.accessOptions).pipe(retry(3)).subscribe(
-            {
-                next: (result: any): void => {
-                    if (this.isNumber(result.code)) {
-                        if (result.code === 0) {
-                            callback(null, result);
-                        } else {
-                            callback(this.Error(500, "A00121"), null);
-                        }
-                    } else {
-                        callback(this.Error(500, "A00121"), null);
-                    }
-                },
-                error: (error: HttpErrorResponse): void => {
-                    callback(this.Error(500, "A00122"), null);
-                },
-                complete: () => {
-                }
-            }
-        );
-    }
-
-    public classify(callback: Callback<any>): void {
-        this.http.get("/classify", this.accessOptions).pipe(retry(3)).subscribe(
-            {
-                next: (result: any): void => {
-                    if (this.isNumber(result.code)) {
-                        if (result.code === 0) {
-                            callback(null, result);
-                        } else {
-                            callback(this.Error(500, "A00121"), null);
-                        }
-                    } else {
-                        callback(this.Error(500, "A00121"), null);
-                    }
-                },
-                error: (error: HttpErrorResponse): void => {
-                    callback(this.Error(500, "A00122"), null);
-                },
-                complete: () => {
-                }
-            }
-        );
-    }
 
 }

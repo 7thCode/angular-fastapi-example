@@ -56,17 +56,4 @@ export class AppComponent implements OnInit {
         });
     }
 
-
-    public classification() {
-        this.service.classification((error, result) => {
-            console.log(result);
-        });
-    }
-
-    public classify() {
-        this.service.classify((error, result) => {
-            console.log(result);
-        });
-    }
-
 }
