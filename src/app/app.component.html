@@ -4,8 +4,8 @@
  * opensource.org/licenses/mit-license.php
 -->
 
-<div>
-    <mat-card>
+<div class="spinner-container">
+    <mat-card style="margin:8px;">
         <mat-card-header>
             <mat-card-title>Login</mat-card-title>
         </mat-card-header>
@@ -35,11 +35,14 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card>
+    <mat-card style="margin:8px;">
+        <mat-card-header>
+            <mat-card-title>Current User</mat-card-title>
+        </mat-card-header>
         <mat-card-content>
-            <div>{{logged_in}}</div>
-            <div>{{displayname}}</div>
+            <div>{{display_name}}</div>
         </mat-card-content>
     </mat-card>
+    <mat-spinner *ngIf="progress == true" class="spinner"></mat-spinner>
 </div>
 <router-outlet></router-outlet>

@@ -3,6 +3,8 @@
 # opensource.org/licenses/mit-license.php
 
 import json
+import hashlib
+
 from datetime import datetime, timedelta
 
 from bson.objectid import ObjectId
@@ -25,7 +27,7 @@ def authenticate(name: str, password: str):
     result = None
     account = user.get_by_name(name)
     content = account["content"]
-    if content["id"] == password:
+    if content["id"] == hashlib.sha256(password.encode()).hexdigest():
         result = account
     return result
 

@@ -3,3 +3,14 @@
  * This software is released under the MIT License.
  * opensource.org/licenses/mit-license.php
  */
+
+
+.spinner-container {
+   position:relative;
+}
+
+.spinner {
+    position:absolute;
+    top:calc(50vh - 50px);
+    left:calc(50vw - 50px);
+}
