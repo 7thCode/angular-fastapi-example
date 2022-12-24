@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2019 7thCode.(http://seventh-code.com/)
+ * This software is released under the MIT License.
+ * opensource.org/licenses/mit-license.php
+ */
+
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {retry} from "rxjs/operators";
@@ -24,31 +30,35 @@ export class AppService {
 
         this.loginOptions = {
             headers: new HttpHeaders({
-                //  "Accept": "application/json; charset=utf-8",
                 "Content-Type": "application/x-www-form-urlencoded"
-                //  "Content-Type": "application/json; charset=utf-8",
             }),
             withCredentials: true,
         };
 
-        //     const access_token: string | null = localStorage.getItem('access_token');
-
     }
 
+    /*
+    * */
     protected isNumber(value: number): boolean {
         return ((typeof value === 'number') && (isFinite(value)));
     };
 
+    /*
+    * */
     private Error(code: number, message: string): any {
         return {code: code, message: message};
     }
 
+    /*
+    * */
     public setAccessToken(access_token: string): void {
         this.accessOptions = {
             headers: new HttpHeaders({"Accept": "application/json; charset=utf-8", "Authorization": "Bearer " + access_token}),
         };
     }
 
+    /*
+    * */
     public removeAccessToken(): void {
         this.accessOptions = null;
     }
@@ -57,7 +67,7 @@ export class AppService {
      *
      * @param username
      * @param password
-     * @param callback オブジェクトを返すコールバック
+     * @param callback
      */
     public login(username: string, password: string, callback: Callback<any>): void {
         this.http.post("/login", "username=" + username + "&password=" + password, this.loginOptions).pipe(retry(3)).subscribe(
@@ -82,6 +92,9 @@ export class AppService {
         );
     }
 
+    /**
+     * @param callback
+     */
     public logout(callback: Callback<any>): void {
         this.http.delete("/logout", this.accessOptions).pipe(retry(3)).subscribe(
             {
@@ -157,6 +170,5 @@ export class AppService {
             }
         );
     }
-
 
 }

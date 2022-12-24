@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
 
     }
 
+    /*
+    * */
     public ngOnInit() {
         const token: string | null = localStorage.getItem('access_token');
         if (token) {
@@ -32,6 +34,8 @@ export class AppComponent implements OnInit {
         }
     }
 
+    /*
+    * */
     public login() {
         const username: string = "manager@gmail.com";
         const password: string = "id";
@@ -42,6 +46,8 @@ export class AppComponent implements OnInit {
         });
     }
 
+    /*
+    * */
     public logout() {
         this.service.logout(() => {
             localStorage.removeItem('access_token');
@@ -49,12 +55,16 @@ export class AppComponent implements OnInit {
         });
     }
 
+    /*
+    * */
     public getSelf() {
         this.service.self((error, result) => {
             this.displayname = result.username
         });
     }
 
+    /*
+    * */
     public renewToken() {
         this.service.renewToken((error, result) => {
             this.service.setAccessToken(result.access_token);
