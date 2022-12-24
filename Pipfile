@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+uvicorn = "*"
+fastapi = "*"
+pymongo = "==3.12.1"
+python-jose = "*"
+fastjinja2templates = "*"
+python-multipart = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

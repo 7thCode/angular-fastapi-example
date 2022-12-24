@@ -1,0 +1,31 @@
+<div>
+    Hello!
+    <button mat-raised-button color="primary" (click)="login()">login</button>
+    <button mat-raised-button color="warn" (click)="getSelf()">getUser</button>
+    <button mat-raised-button color="accent" (click)="renewToken()">renewToken</button>
+    <button mat-raised-button (click)="logout()">logout</button>
+
+    <form #form="ngForm" fxLayout="column" fxLayoutAlign="space-between" novalidate>
+
+        <mat-form-field appearance="outline" style="margin:12px;">
+            <mat-label>メールアドレス</mat-label>
+            <input #username_field="ngModel" [(ngModel)]="username" matInput autocomplete="off" email maxlength="255" minlength="3" placeholder="メールアドレス" required type="email">
+            <mat-error *ngIf="username_field.errors?.['email'];">有効なメールアドレスで</mat-error>
+            <mat-error *ngIf="username_field.errors?.['required'];">入力してください</mat-error>
+            <mat-error *ngIf="username_field.errors?.['maxlength'];">長すぎます</mat-error>
+            <mat-error *ngIf="username_field.errors?.['minlength'];">短すぎます</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="margin:12px;">
+            <mat-label>パスワード</mat-label>
+            <input #password_field="ngModel" [(ngModel)]="password" matInput maxlength="100" placeholder="パスワード" required type="password">
+        </mat-form-field>
+
+    </form>
+
+    <div>{{logged_in}}</div>
+    <div>{{displayname}}</div>
+    <button mat-raised-button (click)="classification()">classification</button>
+    <button mat-raised-button (click)="classify()">classify</button>
+</div>
+<router-outlet></router-outlet>
