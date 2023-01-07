@@ -37,11 +37,20 @@
 
     <mat-card style="margin:8px;">
         <mat-card-header>
-            <mat-card-title>Current User</mat-card-title>
+            <mat-card-title>Operator</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <div>{{display_name}}</div>
+
+            <div *ngFor="let account of accounts">
+                <div>{{account.username}}</div>
+            </div>
+
         </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="create()">create</button>
+            <button mat-raised-button color="warn" (click)="list()">list</button>
+        </mat-card-actions>
     </mat-card>
     <mat-spinner *ngIf="progress !== 0" class="spinner"></mat-spinner>
 </div>

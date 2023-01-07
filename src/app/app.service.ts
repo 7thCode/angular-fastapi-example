@@ -72,6 +72,102 @@ export class AppService {
         };
     }
 
+    public create(username: string, password: string, callback: Callback<any>): void {
+        this.http.post("/account/create", {username: username, password: password}, this.accessOptions).pipe(retry(3)).subscribe(
+            {
+                next: (result: any): void => {
+                    if (this.isNumber(result.code)) {
+                        if (result.code === 0) {
+                            callback(null, result);
+                        } else {
+                            callback(this.Error(500, "A01121"), null);
+                        }
+                    } else {
+                        callback(this.Error(500, "A01122"), null);
+                    }
+                },
+                error: (error: HttpErrorResponse): void => {
+                    callback(this.Error(500, "A01123"), null);
+                },
+                complete: () => {
+                }
+            }
+        );
+    }
+
+    public update(user_id: string, update: any, callback: Callback<any>): void {
+        this.http.put("/account/update", {user_id: user_id, update: update}, this.accessOptions).pipe(retry(3)).subscribe(
+            {
+                next: (result: any): void => {
+                    if (this.isNumber(result.code)) {
+                        if (result.code === 0) {
+                            callback(null, result);
+                        } else {
+                            callback(this.Error(500, "A01121"), null);
+                        }
+                    } else {
+                        callback(this.Error(500, "A01122"), null);
+                    }
+                },
+                error: (error: HttpErrorResponse): void => {
+                    callback(this.Error(500, "A01123"), null);
+                },
+                complete: () => {
+                }
+            }
+        );
+    }
+
+    public delete(username: string, password: string, callback: Callback<any>): void {
+        this.http.delete("/account/delete", this.accessOptions).pipe(retry(3)).subscribe(
+            {
+                next: (result: any): void => {
+                    if (this.isNumber(result.code)) {
+                        if (result.code === 0) {
+                            callback(null, result);
+                        } else {
+                            callback(this.Error(500, "A01121"), null);
+                        }
+                    } else {
+                        callback(this.Error(500, "A01122"), null);
+                    }
+                },
+                error: (error: HttpErrorResponse): void => {
+                    callback(this.Error(500, "A01123"), null);
+                },
+                complete: () => {
+                }
+            }
+        );
+    }
+
+    public list(query: any, option: any, callback: Callback<any>): void {
+        this.http.get("/account/list?query=" + encodeURIComponent(JSON.stringify(query)) + "&option=" + encodeURIComponent(JSON.stringify(option)),
+
+             {headers: new HttpHeaders({"Accept": "application/json; charset=utf-8"})}
+
+            ).pipe(retry(3)).subscribe(
+            {
+                next: (result: any): void => {
+                    if (this.isNumber(result.code)) {
+                        if (result.code === 0) {
+                            callback(null, result.value);
+                        } else {
+                            callback(this.Error(500, "A00121"), null);
+                        }
+                    } else {
+                        callback(this.Error(500, "A00121"), null);
+                    }
+                },
+                error: (error: HttpErrorResponse): void => {
+                    callback(this.Error(500, "A00122"), null);
+                },
+                complete: () => {
+                }
+            }
+        );
+    }
+
     /**
      *
      * @param username
@@ -111,7 +207,7 @@ export class AppService {
                     if (this.isNumber(result.code)) {
                         if (result.code === 0) {
                             this.removeAccessToken();
-                            callback(null, result);
+                            callback(null, result.value);
                         } else {
                             callback(this.Error(500, "A00121"), null);
                         }

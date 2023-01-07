@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 # Copyright (c) 2022 7thCode.(http://seventh-code.com/)
 # This software is released under the MIT License.
 # opensource.org/licenses/mit-license.php
@@ -8,7 +9,7 @@
 # pm2登録
 # pm2 start result.py --name result --interpreter python3
 
-
+import json
 import pathlib
 
 import uvicorn
@@ -29,20 +30,78 @@ app = FastAPI()
 app.mount("/" + PUBLIC, StaticFiles(directory=PATH_PUBLIC), name=PUBLIC)
 
 
-class Token(BaseModel):
+class NewUserParam(BaseModel):
+    username: str
+    password: str
+
+class BaseParam(BaseModel):
+    user_id: str
+
+class UpdateParam(BaseParam):
+    update: dict
+
+
+class User(BaseModel):
+    user_id: str
+    username: str
+    level: int
+
+
+class UserResult(User):
+    code: int
+
+
+class ListResult(BaseModel):
+    code: int
+    value: list[User]
+
+
+class TokenResult(BaseModel):
     code: int
     access_token: str
     token_type: str
 
+@app.post("/account/create")
+async def create(new_user: NewUserParam, operator=Depends(auth.user_from_access_token)):
+    result = None
+    if operator is not None:
+        result = auth.create_user(new_user.username, new_user.password)
+    return result
 
-class User(BaseModel):
-    code: int
-    user_id: str
-    username: str
+
+@app.put("/account/update")
+async def update(update: UpdateParam, operator=Depends(auth.user_from_access_token)):
+    result = None
+    if operator is not None:
+        result = auth.update_user(update.user_id, update.update)
+    return result
+
+
+@app.delete("/account/delete")
+def delete(param: BaseParam, operator=Depends(auth.user_from_access_token)):
+    result = None
+    if operator is not None:
+        result = auth.delete_user(param.user_id)
+    return result
+
+
+@app.get("/account/list", response_model=ListResult)
+def find(query: str = "", option: str = ""):
+    result = []
+    q = json.loads(query)
+    found = auth.find(q)
+    try:
+        doc = found.next()
+        while found is not None:
+            result.append(doc)
+            doc = found.next()
+    except StopIteration:
+        pass
+    return {'code': 0, 'value': result}
 
 
 # Login
-@app.post("/login", response_model=Token)
+@app.post("/login", response_model=TokenResult)
 async def login(form: OAuth2PasswordRequestForm = Depends()):
     user_id = None
     user = auth.authenticate(form.username, form.password)
@@ -50,36 +109,40 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
         user_id = user["user_id"]
     return auth.create_token(user_id)
 
+
 # Logout
-@app.delete("/logout", response_model=Token)
-async def renew_token(current_user: User = Depends(auth.user_from_access_token_with_compare)):
+@app.delete("/logout", response_model=TokenResult)
+async def logout(operator=Depends(auth.user_from_access_token_with_compare)):
     user_id = None
-    if current_user is not None:
-        user_id = current_user["user_id"]
+    if operator is not None:
+        user_id = operator["user_id"]
     return auth.delete_token(user_id)
 
+
 # getToken
-@app.get("/get_token", response_model=Token)
-async def renew_token(current_user: User = Depends(auth.user_from_access_token_with_compare)):
+@app.get("/get_token", response_model=TokenResult)
+async def get_token(operator=Depends(auth.user_from_access_token_with_compare)):
     user_id = None
-    if current_user is not None:
-        user_id = current_user["user_id"]
+    if operator is not None:
+        user_id = operator["user_id"]
     return auth.get_token(user_id)
 
+
 # renewToken
-@app.get("/renew_token", response_model=Token)
-async def renew_token(current_user: User = Depends(auth.user_from_access_token_with_compare)):
+@app.get("/renew_token", response_model=TokenResult)
+async def renew_token(operator=Depends(auth.user_from_access_token_with_compare)):
     user_id = None
-    if current_user is not None:
-        user_id = current_user["user_id"]
+    if operator is not None:
+        user_id = operator["user_id"]
     return auth.create_token(user_id)
 
+
 #
-@app.get("/self", response_model=User)
-async def self(current_user: User = Depends(auth.user_from_access_token)):
+@app.get("/self", response_model=UserResult)
+async def self(operator=Depends(auth.user_from_access_token)):
     result = {"code": -1, "user_id": "", "username": ""}
-    if current_user is not None:
-        result = {"code": 0, "user_id": str(current_user['user_id']), "username": str(current_user['username'])}
+    if operator is not None:
+        result = {"code": 0, "level":operator["level"], "user_id": str(operator['user_id']), "username": str(operator['username'])}
     return result
 
 

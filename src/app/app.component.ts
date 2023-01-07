@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
     public password: string = "";
     public display_name: string = "";
     public progress: number = 0;
+    public accounts: any[] = [];
+
     /**
      *
      **/
@@ -33,17 +35,43 @@ export class AppComponent implements OnInit {
     public ngOnInit() {
         const token: string | null = localStorage.getItem('access_token');
         if (token) {
-            this.service.setAccessToken(token);
             this.progress++;
+            this.service.setAccessToken(token);
             this.service.self((error: IErrorObject, result: any): void => {
                 if (!error) {
-                    this.progress--;
                     this.display_name = result.username;
+                    this.progress--;
                 }
             });
         } else {
 
         }
+    }
+
+    /**
+     * create
+     **/
+    public create() {
+        this.progress++;
+        this.service.create("hoge", "geho", (error: IErrorObject, result: any): void => {
+            if (!error) {
+                 console.log(result);
+                 this.progress--;
+            }
+        });
+    }
+
+    /**
+     * create
+     **/
+    public list() {
+        this.progress++;
+        this.service.list({},{}, (error: IErrorObject, results: any[]): void => {
+            if (!error) {
+               this.accounts = results;
+               this.progress--;
+            }
+        });
     }
 
     /**
