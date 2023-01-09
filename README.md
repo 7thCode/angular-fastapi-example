@@ -8,9 +8,9 @@ angular/fastapi auth example.
 
 Angular 14
 
-### Config
+# Config
 
-# config file
+### config file
 
 default.jsonを追加してみてください。
 パスは“config/default.json”です。
