@@ -8,6 +8,10 @@ angular/fastapi auth example.
 
 Angular 14
 
+### Server
+
+uvicorn/FastAPI
+
 # Config
 
 ### config file
@@ -31,11 +35,6 @@ db: データベース名。任意。
 collection: accountのコレクション名。任意。
 secret: トークンの鍵。任意。
 
-
-
-### Server
-
-uvicorn/FastAPI
 
 
 # API
