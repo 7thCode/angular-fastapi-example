@@ -23,10 +23,10 @@ default.jsonを追加してみてください。
 default.json
 ```js
 {
-	"host": "localhost",
-    "db": "fastapi",
-    "collection": "accounts",
-    "secret": "To be, or not to be."
+  "host": "localhost",
+  "db": "fastapi",
+  "collection": "accounts",
+  "secret": "To be, or not to be."
 }
 ```
 
