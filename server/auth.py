@@ -10,7 +10,8 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
-from server.models import User
+from model.user import User
+from model.mongo import MongoUser
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -18,8 +19,7 @@ config = json.load(open('config/default.json', 'r'))
 
 SECRET = config['secret']
 
-user = User(config['host'], config['db'], config['collection'])
-
+user:User = MongoUser(config['host'], config['db'], config['collection'])
 
 def create_user(username, password):
     return user.create_one(username, hashlib.sha256(password.encode()).hexdigest())

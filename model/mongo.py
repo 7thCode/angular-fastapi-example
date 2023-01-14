@@ -5,13 +5,15 @@
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
+from model.user import User
 
-class User:
+class MongoUser(User):
     client = None
     db = None
     collection = None
 
     def __init__(self, host, db, collection):
+
         with MongoClient(host, 27017) as client:
             self.client = client
             if self.client is not None:
